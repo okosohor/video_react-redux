@@ -1,30 +1,29 @@
-type AddAction = { type: 'goods/ADD', payload: string }
-type TakeAction = { type: 'goods/TAKE', payload: string }
-type ClearAction = { type: 'goods/CLEAR' }
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-type Action = AddAction | TakeAction | ClearAction
+// type AddAction = { type: 'goods/ADD', payload: string }
+// type TakeAction = { type: 'goods/TAKE', payload: string }
+// type ClearAction = { type: 'goods/CLEAR' }
 
-const add = (value: string): AddAction => ({ type: 'goods/ADD', payload: value })
-const take = (value: string): TakeAction => ({ type: 'goods/TAKE', payload: value })
-const clear = (): ClearAction => ({type: 'goods/CLEAR'});
+// type Action = AddAction | TakeAction | ClearAction
 
-export const actions = { add, clear, take }
+// const add = (value: string): AddAction => ({ type: 'goods/ADD', payload: value })
+// const take = (value: string): TakeAction => ({ type: 'goods/TAKE', payload: value })
+// const clear = (): ClearAction => ({type: 'goods/CLEAR'});
 
-const goodsReducer = (goods: string[] = [], action: Action) => {
-  switch(action.type) {
-    case 'goods/ADD':
-      return [...goods, action.payload]
+// export const actions = { add, clear, take }
 
-    case 'goods/TAKE':
-    return goods.filter(good => good !== action.payload);
+const initialState: string[] = [];
 
-    case 'goods/CLEAR':
-      return [];
-
-    default:
-      return goods;
+const goodsSlice = createSlice({
+  name: 'goods',
+  initialState,
+  reducers: {
+    add: (value, actions: PayloadAction<string>) => {value.push(actions.payload)},
+    take:(value, actions: PayloadAction<string>) => (value.filter(elem => elem!== actions.payload)),
+    clear: () => [],
   }
+  }
+);
 
-};
-
-export default goodsReducer;
+export const { actions } = goodsSlice;
+export default goodsSlice.reducer;
